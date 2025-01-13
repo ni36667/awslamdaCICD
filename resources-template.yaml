@@ -1,17 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: CaseStudy Project for Open crudLambdaAPI
+
 Parameters:
-  ElementName:
-    Type: String
-    Default: id
-    Description: Name
-  ElementType:
-    Type: String
-    Default: S
-    Description: Type
-  EnvironmentName:
-    Type: String
-    Default: test
+ EnvironmentName:
+ Description: Environment name for the application - [test/staging]
+ Type: String
+ AllowedValues:
+ - dev
+ - staging
+ 
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -100,11 +97,11 @@ Resources:
     DependsOn:
       - APIGatewayDeployment
       
-  
-  
   Outputs:
-  apiGatewayInvokeURL:
-    Value: !Sub "https://${ApiGatewayResource}.execute-api.${AWS::Region}.amazonaws.com/${EnvironmentName}"
-
-  lambdaArn:
-    Value: !GetAtt "lambdaFunction.Arn"
+   Region:
+   Description: 'Region'
+   Value: !Ref AWS::Region
+ 
+  ApiGatewayEndpoint:
+  Description: 'Api Gateway Endpoint'
+  Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${EnvironmentName}/'
