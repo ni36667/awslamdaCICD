@@ -100,7 +100,11 @@ Resources:
     DependsOn:
       - APIGatewayDeployment
       
+  
+  
   Outputs:
-  MyApiDefaultUrl:
-  Description: My API Gateway Default URL
-  Value: !Sub "https://${ApiGatewayResource}.execute-api.${AWS::Region}.amazonaws.com/${EnvironmentName}"
+  apiGatewayInvokeURL:
+    Value: !Sub "https://${ApiGatewayResource}.execute-api.${AWS::Region}.amazonaws.com/${EnvironmentName}"
+
+  lambdaArn:
+    Value: !GetAtt "lambdaFunction.Arn"
