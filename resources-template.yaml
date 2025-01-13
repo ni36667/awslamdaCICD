@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CaseStudy Project for Open crudLambdaAPI
+Parameters:
+  ElementName:
+    Type: String
+    Default: id
+    Description: Name
+  ElementType:
+    Type: String
+    Default: S
+    Description: Type
+  EnvironmentName:
+    Type: String
+    Default: test
+Resources:
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: casestudy_api_lambda_db
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+
+ 
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !GetAtt IAMRole.Arn
+      Code:
+        S3Bucket: casestudy-s3-bucket
+        S3Key: springbootcrud-0.0.1-SNAPSHOT-lambda-package.zip
+      Handler: com.awslambda.crud.springbootcrud.StreamLambdaHandler::handleRequest
+      Runtime: java17
+      MemorySize: 512
+      Timeout: 30
+      PackageType: Zip
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+        - x86_64
+      TracingConfig:
+        Mode: PassThrough
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+
+  ApiGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: crudLambdaAPI
+    DependsOn: LambdaFunction
+
+  ApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      PathPart: '{proxy+}'
+    DependsOn: ApiGatewayRestApi
+
+  ApiGatewayMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResource
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations
+    DependsOn: ApiGatewayResource
+
+  APIGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      StageName: !Ref EnvironmentName
+    DependsOn: ApiGatewayMethod
+
+  ApiGatewayPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Principal: apigateway.amazonaws.com
+    DependsOn:
+      - APIGatewayDeployment
