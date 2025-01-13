@@ -99,3 +99,8 @@ Resources:
       Principal: apigateway.amazonaws.com
     DependsOn:
       - APIGatewayDeployment
+      
+  Outputs:
+  MyApiDefaultUrl:
+  Description: My API Gateway Default URL
+  Value: !Sub "https://${ApiGatewayResource}.execute-api.${AWS::Region}.amazonaws.com/${EnvironmentName}"
