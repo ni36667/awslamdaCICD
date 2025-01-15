@@ -1,11 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: CaseStudy Project for Open crudLambdaAPI
 
-Parameters:
-   EnvironmentName:
-    Type: String
-    Default: Stage
- 
+
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -82,7 +78,6 @@ Resources:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
-      StageName: !Ref EnvironmentName
     DependsOn: ApiGatewayMethod
 
   ApiGatewayPermission:
