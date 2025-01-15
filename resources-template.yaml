@@ -2,12 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: CaseStudy Project for Open crudLambdaAPI
 
 Parameters:
- EnvironmentName:
- Description: Environment name for the application - [test/staging]
- Type: String
- AllowedValues:
- - test
- - staging
+   AppEnv:
+    Type: String
+    Default: stage
+    Description: Application environment
  
 Resources:
   IAMRole:
@@ -96,12 +94,13 @@ Resources:
       Principal: apigateway.amazonaws.com
     DependsOn:
       - APIGatewayDeployment
+      
+   GateWayAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref AppEnv
     
-  Outputs:
-   Region:
-   Description: 'Region'
-   Value: !Ref AWS::Region
-   
+ Outputs:
   ApiGatewayEndpoint:
-    Description: 'Api Gateway Endpoint'
-    Value: !Sub 'https://${ApiGatewayResource}.execute-api.${AWS::Region}.amazonaws.com/${EnvironmentName}/'
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${GateWayAPI}.execute-api.${AWS::Region}.amazonaws.com/${AppEnv}/"
