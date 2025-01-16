@@ -4,7 +4,7 @@ Description: CaseStudy Project for Open crudLambdaAPI
 Parameters:
    EnvironmentName:
     Type: String
-    Default: Stage
+    Default: testEnv
  
 Resources:
   IAMRole:
