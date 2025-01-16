@@ -3,7 +3,7 @@ Description: CaseStudy Project for Open awslambdaAPI
 Parameters:
   EnvironmentName:
     Type: String
-    Default: test
+    Default: testDeployment
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -50,7 +50,7 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: awslambdaAPI
+      Name: awslambdaCrudApi
     DependsOn: LambdaFunction
 
   ApiGatewayResource:
