@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: CaseStudy Project for Open WeatherAPI
+Description: CaseStudy Project for Open awslambdaAPI
 Parameters:
   EnvironmentName:
     Type: String
@@ -50,7 +50,7 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: WeatherAPI
+      Name: awslambdaAPI
     DependsOn: LambdaFunction
 
   ApiGatewayResource:
