@@ -51,7 +51,7 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: crudApiTest
+      Name: crudAPI
     DependsOn: LambdaFunction
 
   ApiGatewayResource:
