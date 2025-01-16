@@ -1,11 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: CaseStudy Project for Open crudLambdaAPI
-
+Description: CaseStudy Project for Open WeatherAPI
 Parameters:
-   EnvironmentName:
+  EnvironmentName:
     Type: String
-    Default: Stage
- 
+    Default: test
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -28,8 +26,6 @@ Resources:
               - Effect: Allow
                 Action: '*'
                 Resource: '*'
-
- 
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -54,7 +50,7 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: crudLambdaAPI
+      Name: WeatherAPI
     DependsOn: LambdaFunction
 
   ApiGatewayResource:
@@ -93,4 +89,3 @@ Resources:
       Principal: apigateway.amazonaws.com
     DependsOn:
       - APIGatewayDeployment
- 
