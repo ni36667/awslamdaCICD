@@ -1,9 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: CaseStudy Project for Open CRUDAPI
+Description: CaseStudy Project for Open crudLambdaAPI
+
 Parameters:
-  EnvironmentName:
+   EnvironmentName:
     Type: String
-    Default: test
+    Default: Stage
+ 
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -27,6 +29,7 @@ Resources:
                 Action: '*'
                 Resource: '*'
 
+ 
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -51,7 +54,7 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: crudAPI
+      Name: crudLambdaAPI
     DependsOn: LambdaFunction
 
   ApiGatewayResource:
@@ -90,3 +93,4 @@ Resources:
       Principal: apigateway.amazonaws.com
     DependsOn:
       - APIGatewayDeployment
+ 
