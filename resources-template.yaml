@@ -1,14 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: CaseStudy Project for Open CRUDAPI
 Parameters:
-  ElementName:
-    Type: String
-    Default: id
-    Description: Name
-  ElementType:
-    Type: String
-    Default: S
-    Description: Type
   EnvironmentName:
     Type: String
     Default: test
